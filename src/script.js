@@ -41,7 +41,8 @@ function setupComponentOfMain(divComponent)
 {
     // https://api.jquery.com/jQuery/#jQuery2
     $("<div/>",{
-        id:"todoAddComponent"
+        id:"todoAddComponent",
+        class:"p-5 mt-10"
     }).appendTo(divComponent)
 
     $("<div/>",{
@@ -58,28 +59,26 @@ function setupComponentOfMain(divComponent)
 
 function setupAdd(component)
 {
-    let title = document.createElement("input")
-    title.type="text"
-    title.id="titleAdd"
+    $("<input/>",{
+        id:"titleAdd",
+        type:"text",
+        class:"form-control mb-2",
+        placeholder:"Title",
+    }).appendTo(component)
 
-    let description = document.createElement("textarea")
-    description.id="descriptionAdd"
-    
-    let button = document.createElement("input")
-    button.type="button"
-    button.id="buttonAdd"
+    $("<textarea></textarea>",{
+        id:"descriptionAdd",
+        class:"form-control mb-2",
+    }).appendTo(component)
 
-    button.onclick= addTodo;
-
-    //$("#buttonAdd").on( "click", addTodo );
-
-    component.append(title,description,button)
-    
-    $("#buttonAdd").on( "click", function() { alert("test")} );
-
+    $("<input/>",{
+        id:"buttonAdd",
+        type:"button",
+        class:"form-control",
+        value:"Add new todo"
+    })
+    .on( "click", addTodo ).appendTo(component)
         
-
-    
 }
 
 function addTodo()
