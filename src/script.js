@@ -9,12 +9,13 @@ function initTodo()
 
     setupComponentOfMain($("#mainContent"));
 
-    printList($("#todolist"))
+    printList()
 
 }
 
-function printList(divComponent)
+function printList()
 {
+    let divComponent = $("#todolist")
     divComponent.children().remove()
 
     if(todoList===null)
@@ -49,8 +50,23 @@ function printList(divComponent)
             }).text(element.description).appendTo( component );
 
         }
+
+        $("<input/>",{
+            type:"button",
+            class:"form-control",
+            value:"Delete todo"
+        })
+        .on( "click",{id: index}, deleteTodo ).appendTo(component)
         
     });
+}
+
+function deleteTodo(event)
+{
+    todoList.splice(event.data.id);
+    
+    updateLocalStorage();
+    printList();
 }
 
 function setupComponentOfMain(divComponent)
@@ -105,7 +121,7 @@ function addTodo()
     todoList.push({title:$("#titleAdd").val(),description:$("#descriptionAdd").val()})
 
     updateLocalStorage()
-    printList($("#todolist"))   
+    printList()   
 }
 
 function updateLocalStorage()
