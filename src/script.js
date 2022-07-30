@@ -20,17 +20,33 @@ function printList(divComponent)
     if(todoList===null)
         return
 
-    todoList.forEach(element => {
-        let component = $( "<div></div>" ).appendTo( divComponent );
+    todoList.forEach((element,index) => {
+        if(!(element.title || element.description))
+            return
+            
+        let componentCard = $( "<div></div>" ,{
+            class: "card",
+            todoId:index
+        }).appendTo( divComponent );
         
+        let component = $( "<div></div>" ,{
+            class: "card-body"
+        }).appendTo( divComponent );
+        
+        
+
         if(element.title)
         {
-            $( "<h4></h4>" ).text(element.title).appendTo( component );
+            $( "<h4></h4>" ,{
+                class: "card-title"
+            }).text(element.title).appendTo( component );
         }
 
         if(element.description)
         {
-            $( "<div></div>" ).text(element.description).appendTo( component );
+            $( "<div></div>" ,{
+                class: "card-text"
+            }).text(element.description).appendTo( component );
 
         }
         
