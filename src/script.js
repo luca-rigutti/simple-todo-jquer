@@ -30,11 +30,15 @@ function printList()
             todoId:index
         }).appendTo( divComponent );
         
+
         let component = $( "<div></div>" ,{
-            class: "card-body"
-        }).appendTo( divComponent );
+            class: "card-body" + (element.todo? ' bg-success':'')
+        }).appendTo( componentCard );
         
-        
+        let componentCardFooter = $( "<div></div>" ,{
+            class: "card-footer"
+        }).appendTo( componentCard );
+
 
         if(element.title)
         {
@@ -51,19 +55,33 @@ function printList()
 
         }
 
+
+        $('<i></i>',{
+            class:'bi bi-trash'
+        }).on( "click",{id: index}, deleteTodo ).appendTo(componentCardFooter)
+
         $("<input/>",{
-            type:"button",
+            type:"checkbox",
             class:"form-control",
-            value:"Delete todo"
+            value:"Done",
+            checked:element.todo
         })
-        .on( "click",{id: index}, deleteTodo ).appendTo(component)
+        .on( "click",{id: index}, toggleTodo ).appendTo(componentCardFooter)
+        
         
     });
 }
 
+function toggleTodo(event)
+{
+    todoList[event.data.id].todo = !todoList[event.data.id].todo;
+    updateLocalStorage();
+    printList();
+}
+
 function deleteTodo(event)
 {
-    todoList.splice(event.data.id);
+    todoList.splice(event.data.id,1);
     
     updateLocalStorage();
     printList();
@@ -84,7 +102,7 @@ function setupComponentOfMain(divComponent)
 
     setupAdd($("#todoAddComponent"))
     
-
+    $("#copyExport").on( "click", exportTodoList )
 
 
 }
@@ -115,10 +133,16 @@ function setupAdd(component)
 
 function addTodo()
 {
+    if(!($("#titleAdd").val() || $("#descriptionAdd").val()))
+        return
+
     if(todoList===null || todoList===undefined)
         todoList=[]
 
     todoList.push({title:$("#titleAdd").val(),description:$("#descriptionAdd").val()})
+
+    $("#titleAdd").val("")
+    $("#descriptionAdd").val("")
 
     updateLocalStorage()
     printList()   
@@ -127,4 +151,14 @@ function addTodo()
 function updateLocalStorage()
 {
     window.localStorage.setItem('todoList',JSON.stringify(todoList))
+}
+
+function setClipboard(text)
+{
+    navigator.clipboard.writeText(text);
+}
+
+function exportTodoList()
+{
+    setClipboard(JSON.stringify(todoList))
 }
